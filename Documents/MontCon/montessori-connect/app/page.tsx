@@ -14,6 +14,11 @@ export default function Home() {
             <Button color="primary" variant="solid">
               Sign In
             </Button>
+            <Link href="/register" passHref>
+              <Button color="secondary" variant="bordered">
+                Register
+              </Button>
+            </Link>
           </div>
         </nav>
       </header>
