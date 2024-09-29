@@ -34,9 +34,11 @@ export default function Home() {
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="flex mb-8">
-            <button className="flex-1 bg-blue-600 text-white py-2 px-4 text-sm font-semibold">
-              Find A Montessori School
-            </button>
+            <Link href="/find-school" className="flex-1">
+              <button className="w-full bg-blue-600 text-white py-2 px-4 text-sm font-semibold">
+                Find A Montessori School
+              </button>
+            </Link>
             <button className="flex-1 bg-blue-700 text-white py-2 px-4 text-sm font-semibold">
               Find a Montessori Job
             </button>
