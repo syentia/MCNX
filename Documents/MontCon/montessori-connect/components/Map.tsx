@@ -15,41 +15,44 @@ export default function Map({ schools }: MapProps) {
   const [mapLoaded, setMapLoaded] = useState(false)
 
   useEffect(() => {
-    if (map.current) return // initialize map only once
+    if (map.current || !mapContainer.current) return // initialize map only once
 
     map.current = new mapboxgl.Map({
-      container: mapContainer.current!,
+      container: mapContainer.current,
       style: 'mapbox://styles/mapbox/streets-v11',
       center: [-96.7970, 32.7767], // Dallas coordinates
       zoom: 10
     })
 
-    // Add navigation control (zoom buttons)
-    map.current.addControl(new mapboxgl.NavigationControl(), 'top-right')
-
-    // Set mapLoaded to true when the map finishes loading
     map.current.on('load', () => {
       setMapLoaded(true)
     })
 
-    // Clean up on unmount
-    return () => map.current?.remove()
+    return () => {
+      if (map.current) {
+        map.current.remove()
+        map.current = null
+      }
+    }
   }, [])
 
   useEffect(() => {
     if (!map.current || !mapLoaded) return
 
     // Remove existing markers
-    document.querySelectorAll('.mapboxgl-marker').forEach(marker => marker.remove())
+    const markers = document.getElementsByClassName('mapboxgl-marker')
+    while (markers[0]) {
+      markers[0].remove()
+    }
 
     // Add markers for each school
     schools.forEach(school => {
-      const marker = new mapboxgl.Marker()
+      new mapboxgl.Marker()
         .setLngLat(school.coordinates)
         .setPopup(new mapboxgl.Popup().setHTML(`<h3>${school.name}</h3><p>${school.address}</p>`))
         .addTo(map.current!)
     })
   }, [schools, mapLoaded])
 
-  return <div ref={mapContainer} className="w-full h-[600px]" />
+  return <div ref={mapContainer} className="w-full h-full" />
 }

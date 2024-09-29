@@ -39,8 +39,6 @@ export default function FindSchool() {
   const [filteredSchools, setFilteredSchools] = useState(sampleSchools)
 
   const handleSearch = () => {
-    // In a real application, you would fetch schools based on the search query
-    // For now, we'll just filter the sample data
     const filtered = sampleSchools.filter(school => 
       school.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       school.address.toLowerCase().includes(searchQuery.toLowerCase())
@@ -65,11 +63,11 @@ export default function FindSchool() {
               Search
             </Button>
           </div>
-          <div className="flex">
+          <div className="flex h-[600px]">
             <div className="w-2/3 mr-4">
               <MapWithNoSSR schools={filteredSchools} />
             </div>
-            <div className="w-1/3">
+            <div className="w-1/3 overflow-y-auto">
               <SchoolList schools={filteredSchools} />
             </div>
           </div>
