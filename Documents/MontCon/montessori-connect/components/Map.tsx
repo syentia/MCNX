@@ -7,9 +7,11 @@ mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || ''
 
 interface MapProps {
   schools: School[]
+  center: [number, number]
+  zoom: number
 }
 
-export default function Map({ schools }: MapProps) {
+export default function Map({ schools, center, zoom }: MapProps) {
   const mapContainer = useRef<HTMLDivElement>(null)
   const map = useRef<mapboxgl.Map | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
@@ -20,8 +22,8 @@ export default function Map({ schools }: MapProps) {
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/streets-v11',
-      center: [-96.7970, 32.7767], // Dallas coordinates
-      zoom: 10
+      center: center,
+      zoom: zoom
     })
 
     map.current.on('load', () => {
@@ -34,10 +36,13 @@ export default function Map({ schools }: MapProps) {
         map.current = null
       }
     }
-  }, [])
+  }, [center, zoom])
 
   useEffect(() => {
     if (!map.current || !mapLoaded) return
+
+    map.current.setCenter(center)
+    map.current.setZoom(zoom)
 
     // Remove existing markers
     const markers = document.getElementsByClassName('mapboxgl-marker')
@@ -52,7 +57,7 @@ export default function Map({ schools }: MapProps) {
         .setPopup(new mapboxgl.Popup().setHTML(`<h3>${school.name}</h3><p>${school.address}</p>`))
         .addTo(map.current!)
     })
-  }, [schools, mapLoaded])
+  }, [schools, mapLoaded, center, zoom])
 
   return <div ref={mapContainer} className="w-full h-full" />
 }
