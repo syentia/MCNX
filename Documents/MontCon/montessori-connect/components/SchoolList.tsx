@@ -1,5 +1,6 @@
 import { School } from '@/types/school'
 import { Button } from '@nextui-org/react'
+import Link from 'next/link'
 
 interface SchoolListProps {
   schools: School[]
@@ -16,9 +17,11 @@ export default function SchoolList({ schools }: SchoolListProps) {
           {school.isHiring && (
             <p className="text-sm text-green-600 font-semibold">Hiring</p>
           )}
-          <Button size="sm" color="primary" className="mt-2">
-            View Profile
-          </Button>
+          <Link href={`/school/${school.id}`} passHref>
+            <Button size="sm" color="primary" className="mt-2">
+              View Profile
+            </Button>
+          </Link>
         </div>
       ))}
     </div>
